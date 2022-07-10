@@ -1,0 +1,622 @@
+---------------------------------------------NOT---------------------------------------------------
+
+module testBench();
+  wire y1;
+  reg a1;
+  inverter inv(y1,a1);
+  
+  initial begin
+    a1 = 1'b0;
+    #1 a1= 1'b1;
+    #1 a1= 1'b0;
+    #1 a1= 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+``````````````````````````````````
+
+module inverter(y,a);
+	input a;
+  	output y;
+  	
+  not not1(y,a);
+endmodule
+
+``````````````````````````````````
+
+module inverter(y,a);
+	input a;
+  	output y;
+  	
+  assign y = ~a;
+endmodule
+
+
+``````````````````````````````````
+
+module inverter(y,a);
+	input a;
+  	output reg y;
+  	
+  always @ (a) begin
+    if(a==1'b0)
+      y=1'b1;
+    else
+      y=1'b0;
+  end
+endmodule
+
+------------------------------------------------not-------------------------------------------------
+
+------------------------------------------------AND-------------------------------------------------
+
+module testBench();
+  wire y1;
+  reg a1,b1;
+  andGate and1(y1,a1,b1);
+  
+  initial begin
+    a1 = 1'b0;
+    b1 = 1'b0;
+    #1 
+    b1= 1'b1;
+    a1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+
+``````````````````````````````````
+module andGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  assign y = a&b;
+endmodule
+
+``````````````````````````````````
+module andGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+
+  and and1(y,a,b);
+endmodule
+
+``````````````````````````````````
+module andGate(y,a,b);
+	input a,b;
+  	output reg y;
+  	
+  always @(a or b) begin
+    if(a==1'b1 & b==1'b1)
+      y=1'b1;
+    else
+      y=1'b0;
+  end
+endmodule
+
+-------------------------------------------------and------------------------------------------------
+--------------------------------------------------OR------------------------------------------------
+
+module testBench();
+  wire y1;
+  reg a1,b1;
+  orGate or1(y1,a1,b1);
+  
+  initial begin
+    a1 = 1'b0;
+    b1 = 1'b0;
+    #1 
+    b1= 1'b1;
+    a1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+``````````````````````````````````
+module orGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  or or1(y,a,b);
+endmodule
+
+``````````````````````````````````
+
+module orGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  assign y =a | b;
+endmodule
+
+``````````````````````````````````
+
+module orGate(y,a,b);
+	input a,b;
+  	output reg y;
+  	
+  always @(a or b) begin
+    if(a==1'b1 | b==1'b1)
+      y=1'b1;
+    else
+      y=1'b0;
+  end
+endmodule
+
+-----------------------------------------------or--------------------------------------------------
+----------------------------------------------XOR--------------------------------------------------
+
+module testBench();
+  wire y1;
+  reg a1,b1;
+  xorGate xor1(y1,a1,b1);
+  
+  initial begin
+    a1 = 1'b0;
+    b1 = 1'b0;
+    #1 
+    b1= 1'b1;
+    a1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+``````````````````````````````````
+module xorGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  xor xor1(y,a,b);
+endmodule
+
+``````````````````````````````````
+module xorGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  assign y =a^b;
+endmodule
+
+``````````````````````````````````
+module xorGate(y,a,b);
+	input a,b;
+  	output reg y;
+  	
+  always @ (a or b) begin
+    if( a == 1'b0 & b == 1'b0 | a == 1'b1 & b == 1'b1 )
+       y = 1'b0;
+     else
+       y = 1'b1;
+  end
+endmodule
+
+---------------------------------------------xor--------------------------------------------------
+--------------------------------------------NAND--------------------------------------------------
+
+module testBench();
+  wire y1;
+  reg a1,b1;
+  nandGate nand1(y1,a1,b1);
+  
+  initial begin
+    a1 = 1'b0;
+    b1 = 1'b0;
+    #1 
+    b1= 1'b1;
+    a1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+``````````````````````````````````
+module nandGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  nand nand1(y,a,b);
+endmodule
+
+``````````````````````````````````
+module nandGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  assign y = ~(a&b);
+endmodule
+
+``````````````````````````````````
+module nandGate(y,a,b);
+	input a,b;
+  	output reg y;
+  	
+  always @(a or b) begin
+    if(a==1'b1 & b==1'b1)
+      y=1'b0;
+    else
+      y=1'b1;
+  end
+endmodule
+
+---------------------------------------------nand-------------------------------------------------
+---------------------------------------------NOR--------------------------------------------------
+
+module testBench();
+  wire y1;
+  reg a1,b1;
+  norGate nor1(y1,a1,b1);
+  
+  initial begin
+    a1 = 1'b0;
+    b1 = 1'b0;
+    #1 
+    b1= 1'b1;
+    a1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+``````````````````````````````````
+module norGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  nor nor1(y,a,b);
+endmodule
+
+``````````````````````````````````
+module norGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  assign y = ~(a|b);
+endmodule
+
+``````````````````````````````````
+module norGate(y,a,b);
+	input a,b;
+  	output reg y;
+  	
+  always @(a or b) begin
+    if(a==1'b1 | b==1'b1)
+      y=1'b0;
+    else
+      y=1'b1;
+  end
+endmodule
+
+------------------------------------------------nor-----------------------------------------------
+-----------------------------------------------NXOR-----------------------------------------------
+
+module testBench();
+  wire y1;
+  reg a1,b1;
+  xnorGate xnor1(y1,a1,b1);
+  
+  initial begin
+    a1 = 1'b0;
+    b1 = 1'b0;
+    #1 
+    b1= 1'b1;
+    a1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b0;
+    #1 
+    a1= 1'b1;
+    b1 = 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+``````````````````````````````````
+module xnorGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  xnor xnor1(y,a,b);
+endmodule
+
+``````````````````````````````````
+module xnorGate(y,a,b);
+	input a,b;
+  	output y;
+  	
+  assign y = ~(a^b);
+endmodule
+
+``````````````````````````````````
+module xnorGate(y,a,b);
+	input a,b;
+  	output reg y;
+  	
+  always @ (a or b) begin
+    if( a == 1'b0 & b == 1'b0 | a == 1'b1 & b == 1'b1 )
+       y = 1'b1;
+     else
+       y = 1'b0;
+  end
+endmodule
+
+-------------------------------------------------------------------------------------------------
+
+
+
+
+
+-------------------------------------------------------------------------------------------------
+-----------------------------------------HALF ADDER--------------------------------------------------------
+
+module testBench();
+  wire y1,co;
+  reg b1,c1;
+  
+  HA H1(c0,s1,b1,c1);
+  
+  initial begin
+    b1 = 1'b0;
+    c1 = 1'b0;
+    #1 
+    b1 = 1'b0;
+    c1 = 1'b1;
+    #1 
+    b1 = 1'b1;
+    c1 = 1'b0;
+    #1 
+    b1 = 1'b1;
+    c1 = 1'b1;
+    #1
+    b1 = 1'b0;
+    c1 = 1'b0;
+    
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+
+``````````````````````````````````
+
+module HA(co,s,a,b);
+  input a,b;
+  output co,s;
+  
+  xor xor1(s,a,b);
+  and and1(co,a,b);
+  
+endmodule
+
+``````````````````````````````````
+module HA(co,s,a,b);
+  input a,b;
+  output co,s;
+  
+  assign co = a&b ;
+  assign s = a^b; 
+  
+endmodule
+
+``````````````````````````````````
+module HA(co,s,a,b);
+  input a,b;
+  output reg co,s;
+  
+  always @ (a or b) begin
+    if(a == 1'b0 & b == 1'b0)
+      begin
+        s=1'b0;
+        co=1'b0;
+      end
+    else if(a == 1'b1 & b == 1'b1)
+      begin
+        s=1'b1;
+        co=1'b1;
+      end
+    else 
+      begin
+        s=1'b1;
+        co=1'b0;
+      end 
+  end
+  
+endmodule
+      
+      
+-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------
+--------------------------------------------FULL ADDER-----------------------------------------------------
+
+module testBench();
+  wire y1,co;
+  reg a1,b1,c1;
+  
+  FA F1(c0,s1,a1,b1,c1);
+  
+  initial begin
+    a1 = 1'b0;
+    b1 = 1'b0;
+    c1 = 1'b0;
+    #1 
+   a1 = 1'b0;
+    b1 = 1'b0;
+    c1 = 1'b1;
+    #1 
+    a1 = 1'b0;
+    b1 = 1'b1;
+    c1 = 1'b0;
+    #1 
+    a1 = 1'b0;
+    b1 = 1'b1;
+    c1 = 1'b1;
+    #1
+    a1 = 1'b1;
+    b1 = 1'b0;
+    c1 = 1'b0;
+    #1 
+    a1 = 1'b1;
+    b1 = 1'b0;
+    c1 = 1'b1;
+    #1 
+    a1 = 1'b1;
+    b1 = 1'b1;
+    c1 = 1'b0;
+    #1 
+    a1 = 1'b1;
+    b1 = 1'b1;
+    c1 = 1'b1;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+
+``````````````````````````````````
+
+module FA(co,s,a,b,c);
+  input a,b,c;
+  output co,s;
+  wire w1,ab,ac,bc,w2;
+  
+  xor xor1(w1,a,b);
+  xor xor1(s,w1,c);
+  
+  and and1(ab,a,b);
+  and and1(ac,a,c);
+  and and1(bc,b,c);
+  
+  or or1(w2,ac,ab);
+  or or1(co,w2,bc);
+  
+endmodule
+
+``````````````````````````````````
+module FA(co,s,a,b,c);
+  input a,b,c;
+  output co,s;
+  
+  assign co = a&b | a&c | b&c ;
+  assign s = a^b^c; 
+  
+endmodule
+
+``````````````````````````````````
+module FA(co,s,a,b,c);
+  input a,b,c;
+  output reg co,s;
+  
+  always @ (a or b or c) begin
+    if(a == 1'b0 & b == 1'b0 & c == 1'b0)
+      begin
+        s=1'b0;
+        co=1'b0;
+      end
+    else if(a == 1'b0 & b == 1'b0 & c == 1'b1)
+      begin
+        s=1'b1;
+        co=1'b0;
+      end
+    else if(a == 1'b0 & b == 1'b1 & c == 1'b0)
+      begin
+        s=1'b1;
+        co=1'b0;
+      end
+    else if(a == 1'b0 & b == 1'b1 & c == 1'b1)
+      begin
+        s=1'b0;
+        co=1'b1;
+      end
+    else if(a == 1'b1 & b == 1'b0 & c == 1'b0)
+      begin
+        s=1'b1;
+        co=1'b0;
+      end
+    else if(a == 1'b1 & b == 1'b0 & c == 1'b1)
+      begin
+        s=1'b0;
+        co=1'b1;
+      end
+    else if(a == 1'b1 & b == 1'b1 & c == 1'b0)
+      begin
+        s=1'b0;
+        co=1'b1;
+      end
+    else if(a == 1'b1 & b == 1'b1 & c == 1'b1)
+      begin
+        s=1'b1;
+        co=1'b1;
+      end
+  end
+  
+endmodule
+      
+-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------

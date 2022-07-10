@@ -1,0 +1,306 @@
+---------------------------------------------------------D FlipFlop---------------------------------------------------------
+
+module testBench();
+  reg d1,c1;
+  wire q1,qb1;
+  
+  dff d(q1,qb1,d1,c1);
+  
+  initial begin
+  	c1=1'b0;
+    d1=1'b0;
+    #1 d1=1'b1;
+    #1 c1=1'b1;d1=1'b0;
+    #1 d1=1'b1;
+    #1 d1=1'b0;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+______________________________________________gate-level-model
+
+module dff(q,qb,d,c);
+    input d,c;
+  output q,qb;
+  
+  wire db,x,y;
+  
+  not n1(db,d);
+  nand n1(x,c,d);
+  nand n1(y,c,db);
+  nand n1(q,qb,y);
+  nand n1(qb,q,x);
+endmodule
+
+______________________________________________dataflow model
+
+module dff(q,qb,d,c);
+    input d,c;
+  output q,qb;
+  assign q= (d&c)|q;
+  assign qb= ~q;
+  
+endmodule
+
+______________________________________________behavioral model
+
+module dff(q,qb,d,c,p,clr);
+    input d,c,p,clr;
+  output reg q,qb;
+  always @(posedge c) begin
+    if(clr !=1) begin
+      q <=0;
+      qb <=1;
+    end
+    else begin
+      q <=d; qb <= !d;
+    end
+  end  
+  
+endmodule
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------JK FlipFlop---------------------------------------------------------
+
+module testBench();
+  reg j1,k1,c1;
+  wire q1,qb1;
+  
+  jkff jk(q1,qb1,j1,k1,c1);
+  
+  initial begin
+  	c1=1'b0;
+    j1=1'b0;
+    k1=1'b0;
+    #1 
+        j1=1'b0;
+		k1=1'b1;
+    #1 
+        k1=1'b0;
+        j1=1'b1;
+
+    #1 
+    	j1=1'b1;
+    	k1=1'b1;
+    #1 	
+    	c1=1'b1;
+    	j1=1'b0;
+    	k1=1'b0;
+    #1 
+    	j1=1'b0;
+    	k1=1'b1;
+    #1 
+    	j1=1'b1;
+    	k1=1'b0;
+    #1 
+    	j1=1'b1;
+    	k1=1'b1;
+    #1 
+    	j1=1'b0;
+    	k1=1'b0;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+______________________________________________gate-level-model
+
+module jkff(q,qb,j,k,c);
+	input j,k,c;
+  output q,qb;
+  wire a1,a2;
+  assign q=1'b0;
+  assign qb = ~q;
+  nand n1(a1,j,qb,c);
+  nand n2(a2,k,q,c);
+  nand n3(q,qb,a1);
+  nand n3(qb,q,a2);
+endmodule
+
+______________________________________________dataflow model
+
+module jkff(q,qb,j,k,c);
+	input j,k,c;
+  	output q,qb;
+  assign q=(j&~q&c)|q;
+  assign qb = (k&q&c)|~q;
+  
+endmodule
+
+______________________________________________behavioral model
+
+module jkff(q,qb,c,j,k,p,clr);
+  input j,k,c,p,clr;
+  output reg q,qb;
+  
+  always @(posedge c) begin
+    if(!p & !clr) q<=0;
+    else case({j,k})
+      2'b00:q<=q;
+      2'b01:q<=0;
+      2'b10:q<=q;
+      2'b11:q<=~q;
+    endcase
+    assign qb =~q;
+  end
+	
+  
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------Ring Counter--------------------------------------------------------
+
+______________________________________________gate-level-model
+
+module dff(q,qb,d,c,p,clr);
+    input d,c,p,clr;
+  output reg q,qb;
+  always @(posedge c) begin
+    if(clr !=1) begin
+      q <=0;
+      qb <=1;
+    end
+    else begin
+      q <=d; qb <= !d;
+    end
+  end  
+  
+endmodule
+
+module rc(output[3:0] o,input c,input r);
+  wire a1,a2,a3,a4;
+  
+  dff d1(o[0],a1,o[3],c,1'b1,1'b1);
+  dff d2(o[1],a2,o[0],c,1'b1,1'b1);
+  dff d3(o[2],a3,o[1],c,1'b1,1'b1);
+  dff d4(o[3],a4,o[2],c,1'b1,1'b1);
+endmodule
+
+______________________________________________dataflow model
+
+module rc(output reg[3:0] o,input c,input r);
+  assign out = 4'b0000;
+  assign o[3] =o[0];
+  assign o[2] =o[3];
+  assign o[1] =o[2];
+  assign o[0] =o[1];
+endmodule
+______________________________________________behavioral model
+
+module rc(output reg[3:0] o,input c,input r);
+  always @(posedge c) begin
+    if(!r) o = 4'b0000;
+    else if(o ==4'b0000) o = 4'b0001;
+    else o = {o[2:0],o[3]};
+  end
+endmodule
+
+---------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------Johnson Counter--------------------------------------------------------
+
+______________________________________________gate-level-model
+
+module dff(q,qb,d,c,p,clr);
+    input d,c,p,clr;
+  output reg q,qb;
+  always @(posedge c) begin
+    if(clr !=1) begin
+      q <=0;
+      qb <=1;
+    end
+    else begin
+      q <=d; qb <= !d;
+    end
+  end  
+  
+endmodule
+
+module jc(output[3:0] o,input c,input r);
+  wire a1,a2,a3,a4;
+  
+  dff d1(o[0],a1,a4,c,1'b1,1'b1);
+  dff d2(o[1],a2,o[0],c,1'b1,1'b1);
+  dff d3(o[2],a3,o[1],c,1'b1,1'b1);
+  dff d4(o[3],a4,o[2],c,1'b1,1'b1);
+endmodule
+
+______________________________________________dataflow model
+
+module jc(output reg[3:0] o,input c,input r);
+  assign out = 4'b0000;
+  assign o[1] =o[0];
+  assign o[2] =o[1];
+  assign o[3] =o[2];
+  assign o[0] =o[3];
+endmodule
+______________________________________________behavioral model
+
+module jc(output reg[3:0] o,input c,input r);
+  always @(posedge c) begin
+    if(!r) o = 4'b0000;
+    else o = {o[2:0],~o[3]};
+  end
+endmodule
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------Binary Counter----------------------------------------------------------
+
+______________________________________________gate-level-model
+
+module dff(q,qb,d,c,p,clr);
+    input d,c,p,clr;
+  output reg q,qb;
+  always @(posedge c) begin
+    if(clr !=1) begin
+      q <=0;
+      qb <=1;
+    end
+    else begin
+      q <=d; qb <= !d;
+    end
+  end  
+  
+endmodule
+
+module bc(output[3:0] o,input c,input r);
+  wire a1,a2,a3,a4;
+  
+  dff d1(o[0],a1,a1,c,1'b1,1'b1);
+  dff d2(o[1],a2,a2,c,1'b1,1'b1);
+  dff d3(o[2],a3,a3,c,1'b1,1'b1);
+  dff d4(o[3],a4,a4,c,1'b1,1'b1);
+endmodule
+
+______________________________________________dataflow model
+
+module bc(output reg[3:0] o,input c,input r);
+  assign o[0] = ~ o[0];
+  assign o[1] = o[1]^o[0];
+  assign o[2] = o[2]&~o[1] | o[2] &~o[0] | ~o[2]&o[1]&o[0];
+  assign o[3] = o[3]&~o[2] | o[3] &~o[1] | o[3] &~o[0] | ~o[3]&o[2]&o[1]&o[0];
+endmodule
+______________________________________________behavioral model
+
+module bc(output reg[3:0] o,input c,input r);
+  always @(posedge c) begin
+    if(!r) o<=0;
+    else o<=o+1;
+  end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------

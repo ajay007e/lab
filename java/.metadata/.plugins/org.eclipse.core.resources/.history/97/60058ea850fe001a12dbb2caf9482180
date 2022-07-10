@@ -1,0 +1,53 @@
+package javatest;
+
+class Employee
+{
+	String name,address;
+	int age,salary;
+	long mob;
+	
+	void setData(String name,int age,long mob,String address,int salary)
+	{
+		this.name = name;
+		this.age = age;
+		this.mob = mob;
+		this.address = address;
+		this.salary = salary;
+	}
+	
+}
+
+class Manager extends Employee
+{
+	String dept;
+	
+	void setDept()
+	{
+		System.out.println("Name:"+name+"\nAge:"+age+"Mobile:"+mob+"\nAdress:"+address+"\nSalary:"+salary+"Department:"+dept);
+	}
+	
+}
+
+class Officer extends Employee
+{
+	String spec;
+	
+	void setSpec(String spec)
+	{
+		this.spec = spec;
+	}
+	
+}
+public class DataOfLabours {
+	public static void main(String arg[])
+	{
+		Manager mg = new Manager();
+		mg.name = "Ajay Mathew";
+		mg.age = 20;
+		mg.mob = 8547769897L;
+		mg.address = "Edathazhe House Odamthode";
+		mg.salary = 25000;
+		mg.dept = "CSE";
+		mg.setDept();		
+	}
+}

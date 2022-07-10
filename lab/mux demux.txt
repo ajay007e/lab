@@ -1,0 +1,152 @@
+
+--------------------------------MUX---------------------------------------------
+module testBench();
+  reg [3:0] d1;
+  reg[1:0] s1;
+  wire y1;
+  
+  mux mux1(y1,s1,d1);
+  
+  initial begin
+    d1 = 4'b1010;
+    s1 = 2'b00;
+    #1 s1 = 2'b01;
+    #1 s1 = 2'b10;
+    #1 s1 = 2'b11;
+    #1 s1 = 2'b00;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+
+_____________________________________gate-level
+module mux(y,s,d);
+  input [3:0] d;
+  input [1:0] s;
+  output y;
+  wire s1,s0,t1,t2,t3,t4;
+  
+  not n1(s1,s[1]);
+  not n2(s0,s[0]);
+  and an1(t1,s1,s0,d[0]); 
+  and an1(t2,s1,s[0],d[1]); 
+  and an1(t3,s[1],s0,d[2]); 
+  and an1(t4,s[1],s[1],d[3]);
+  or o1(y,t1,t2,t3,t4);
+  
+endmodule
+_____________________________________dataflow-model
+module mux(y,s,d);
+  input [3:0] d;
+  input [1:0] s;
+  output y;
+  assign y = (~s[1] & ~s[0] & d[0]) | (~s[1] & s[0] & d[1]) | (s[1] & ~s[0] & d[2]) | (s[1] & s[0] & d[3]) ;
+  
+endmodule
+_____________________________________behavioral-model
+
+module mux(y,s,d);
+  input [3:0] d;
+  input [1:0] s;
+  output reg y;
+  always @ (s or d) begin 
+    case(s)
+      2'b00 : y=d[0]; 
+      2'b01 : y=d[1]; 
+      2'b10 : y=d[2]; 
+      2'b11 : y=d[3]; 
+    endcase
+  end
+  
+endmodule
+
+
+------------------------------------------mux-----------------------------------
+-----------------------------------------DEMUX----------------------------------
+
+module testBench();
+  reg d1;
+  reg[1:0] s1;
+  wire[3:0] y1;
+  
+  demux demux1(y1,s1,d1);
+  
+  initial begin
+    d1 = 1'b1;
+    s1 = 2'b00;
+    #1 s1 = 2'b01;
+    #1 
+//     d1 = 1'b1;
+    s1 = 2'b10;
+    #1 s1 = 2'b11;
+    #1 s1 = 2'b00;
+  end
+  
+  initial begin
+    $dumpfile("dumpfile.vcd");
+    $dumpvars();
+  end
+endmodule
+
+________________________________gate-level-model
+
+module demux(y,s,d);
+  input d;
+  input [1:0] s;
+  output [3:0] y;
+  wire s1,s0;
+  
+  not n1(s1,s[1]);
+  not n2(s0,s[0]);
+  and a1(y[0],s1,s0,d);
+  and a1(y[1],s1,s[0],d);
+  and a1(y[2],s[1],s0,d);
+  and a1(y[3],s[1],s[0],d);
+  
+endmodule
+_________________________________dataflow-model
+module demux(y,s,d);
+  input d;
+  input [1:0] s;
+  output [3:0] y;
+  assign y[0] = ~s[0] & ~s[1] & d;
+  assign y[1] = s[0] & ~s[1] & d;
+  assign y[2] = ~s[0] & s[1] & d;
+  assign y[3] = s[0] & s[1] & d;
+  
+endmodule
+
+_________________________________behavioral-model
+
+module demux(y,s,d);
+  input d;
+  input [1:0] s;
+  output reg [3:0] y;
+  always @ (s or d) begin 
+    y = 4'b0000;
+    case(s)
+      2'b00 : y[0]=d; 
+      2'b01 : y[1]=d; 
+      2'b10 : y[2]=d; 
+      2'b11 : y[3]=d; 
+    endcase
+  end
+  
+endmodule
+
+-----------------------------------------demux----------------------------------
+
+
+
+
+
+
+
+
+
+
+
